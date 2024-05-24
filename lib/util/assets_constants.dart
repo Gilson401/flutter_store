@@ -1,0 +1,1 @@
+const logo = 'lib/assets/images/fake-logo.jpg';
