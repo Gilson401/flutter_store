@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 width: 100,
                 height: 100,
-                child: Image.asset(logo),),
+                child: Image.asset(AssetsConstants.logo),),
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
