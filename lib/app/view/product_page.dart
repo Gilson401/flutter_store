@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_store/app/controller/products_controller.dart';
 import 'package:flutter_store/app/model/product_model.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:flutter_store/app/view/widgets/bottom_bar.dart';
+import 'package:flutter_store/routes/app_routes.dart';
+import 'package:get/get.dart';
+import 'dart:core';
 
 class ProductPage extends StatefulWidget {
   final Product? product;
@@ -11,39 +16,83 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  double value = 0;
-  int count = 0;
+  final productController = Get.put(ProductController());
+
+  double starRatingValue = 0;
+  int starRatingCount = 0;
+  String productId = '';
+  Product? product;
 
   @override
   void initState() {
-    value = widget.product!.rating!.rate!;
-    count = widget.product!.rating!.count!;
     super.initState();
+    productController.product.listen((p0) => setState(() => product = p0));
+
+    productController.error.listen((event) {
+      Future(() => Get.toNamed(Routes.HOME));
+    });
+    if (widget.product == null) {
+      String uriBaseString = Uri.base.toString().replaceFirst('/#/', '/');
+      dynamic pardesUri = Uri.parse(uriBaseString);
+      String? id = pardesUri.queryParameters['id'];
+      if (id != null) {
+        productId = pardesUri.queryParameters['id'];
+        
+        productController.loadProductById(int.parse(productId));
+      } else {
+        Future.delayed(
+            const Duration(seconds: 1), () => Get.toNamed(Routes.HOME));
+      }
+    } else {
+      product = widget.product;
+      starRatingValue = widget.product!.rating!.rate!;
+      starRatingCount = widget.product!.rating!.count!;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (product == null) {
+      return Scaffold(
+          body: Center(
+              child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const CircularProgressIndicator(),
+          Text('Carregando produto: $productId')
+        ],
+      )));
+    }
+
     return SafeArea(
         child: Scaffold(
-      appBar:
-          AppBar(title: Text(' ${widget.product?.title ?? 'UnsetProduct'}')),
+      appBar: AppBar(
+        title: Text('Código ${product?.id}'),
+        actions: [
+          IconButton(
+            tooltip: 'Carrinho',
+            icon: const Icon(Icons.shopping_bag_outlined),
+            onPressed: () {},
+          )
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
             Image.network(
-              widget.product!.image!,
+              product!.image!,
               width: 100,
             ),
             Center(
-                child: Text(
-                    'Product ${widget.product?.description ?? 'UnsetProduct'}')),
+                child:
+                    Text('Product ${product?.description ?? 'UnsetProduct'}')),
             RatingStars(
-              value: value,
+              value: starRatingValue,
               onValueChanged: (v) {
                 //
                 setState(() {
-                  value = v;
+                  starRatingValue = v;
                 });
               },
               starBuilder: (index, color) => Icon(
@@ -70,16 +119,27 @@ class _ProductPageState extends State<ProductPage> {
               starOffColor: const Color(0xffe7e8ea),
               starColor: Colors.yellow,
             ),
-            Text(widget.product!.category!),
-            Text(widget.product!.price!.toString()),
+            Text(product!.category!),
+            Text(product!.price!.toString()),
             IconButton(
               tooltip: 'Favorite',
               icon: const Icon(Icons.favorite),
-              onPressed: () {},
+              onPressed: () {
+                final SnackBar snackBar = SnackBar(
+                  content: const Text('Item favoritado'),
+                  action: SnackBarAction(
+                    label: 'Ok',
+                    onPressed: () {},
+                  ),
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const BottomBar(isElevated: false, isVisible: true),
     ));
   }
 }

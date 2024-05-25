@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_store/app/controller/products_controller.dart';
 import 'package:flutter_store/app/model/category_model.dart';
 import 'package:flutter_store/app/model/product_model.dart';
+import 'package:flutter_store/routes/app_routes.dart';
 import 'package:flutter_store/util/assets_constants.dart';
 import 'package:flutter_store/app/view/product_page.dart';
 import 'package:flutter_store/app/view/widgets/bottom_bar.dart';
@@ -42,7 +43,9 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<Product> displayList() {
-    if (categoryFilter == CategoryType.all.name) return productController.productList;
+    if (categoryFilter == CategoryType.all.name) {
+      return productController.productList;
+    }
     return productController.productList
         .where((p0) => p0.category == categoryFilter)
         .toList();
@@ -50,15 +53,20 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    productController.loadProducts();
     super.initState();
+  }
+
+    @override
+  void dispose() {
+    productController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Store'),
+        title: const Text('Flutter Store Home'),
         centerTitle: true,
         actions: [],
       ),
@@ -69,15 +77,22 @@ class _HomePageState extends State<HomePage> {
             height: 100,
             child: categoryListView(),
           ),
+          GetX<ProductController>(
+              init: productController,
+              builder: (_) {
+                if (_.isLoading()) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color.fromARGB(192, 88, 55, 10),
+                    ),
+                  );
+                }
+
+                return const SizedBox.shrink();
+              }),
           Expanded(
             child: Obx(() {
-              if (productController.isLoading()) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: Color.fromARGB(192, 88, 55, 10),
-                  ),
-                );
-              }
+              
               List<Product> entries = [...displayList()];
               return ListView.separated(
                   padding: const EdgeInsets.all(8),
@@ -112,7 +127,13 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       onTap: () {
-                        Get.to(ProductPage(product: entries[index]));
+                        Navigator.of(context).push(MaterialPageRoute<Widget>(
+                            builder: (_) =>
+                                ProductPage(product: entries[index]),
+                            settings: RouteSettings(
+                                name: Routes.PRODUCT,
+                                arguments:
+                                    ProductPage(product: entries[index]))));
                       },
                     );
                   });
@@ -126,39 +147,43 @@ class _HomePageState extends State<HomePage> {
 
   ListView categoryListView() {
     return ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              for (Category category in categories)
-                Card(
-                  clipBehavior: Clip.hardEdge,
-                  child: InkWell(
-                    splashColor: Colors.blue.withAlpha(30),
-                    onTap: () {
-                      setState(() =>categoryFilter = category.name );
-                    },
-                    child: SizedBox(
-                      width: 100,
-                      height: 50,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: Image.asset(
-                                  fit: BoxFit.scaleDown,
-                                  width: 50,
-                                  height: 50,
-                                  category.icon),
-                            ),
-                            Expanded(child: 
-                            Center(child: Text(category.description, textAlign: TextAlign.center,))),
-                          ],
-                        ),
+      scrollDirection: Axis.horizontal,
+      children: [
+        for (Category category in categories)
+          Card(
+            clipBehavior: Clip.hardEdge,
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(30),
+              onTap: () {
+                setState(() => categoryFilter = category.name);
+              },
+              child: SizedBox(
+                width: 100,
+                height: 50,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Image.asset(
+                            fit: BoxFit.scaleDown,
+                            width: 50,
+                            height: 50,
+                            category.icon),
                       ),
-                    ),
+                      Expanded(
+                          child: Center(
+                              child: Text(
+                        category.description,
+                        textAlign: TextAlign.center,
+                      ))),
+                    ],
                   ),
                 ),
-            ],
-          );
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }
