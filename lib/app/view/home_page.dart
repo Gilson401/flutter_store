@@ -1,48 +1,164 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_store/app/view/category_page.dart';
+import 'package:flutter_store/app/controller/products_controller.dart';
+import 'package:flutter_store/app/model/category_model.dart';
+import 'package:flutter_store/app/model/product_model.dart';
+import 'package:flutter_store/util/assets_constants.dart';
+import 'package:flutter_store/app/view/product_page.dart';
+import 'package:flutter_store/app/view/widgets/bottom_bar.dart';
 import 'package:get/get.dart';
-import 'package:flutter_store/app/controller/home_controller.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
-class HomePage extends StatelessWidget {
-  final controller = Get.put(HomeController());
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-  HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
-  final List<String> entries = <String>[
-  "electronics",
-  "jewelery",
-  "men's clothing",
-  "women's clothing"
-];
+class _HomePageState extends State<HomePage> {
+  String categoryFilter = CategoryType.all.name;
+  final productController = Get.put(ProductController());
+
+  final List<Category> categories = [
+    Category(
+        description: CategoryType.all.description,
+        icon: AssetsConstants.logo,
+        name: CategoryType.all.name),
+    Category(
+        description: CategoryType.electronics.description,
+        icon: AssetsConstants.electronics,
+        name: CategoryType.electronics.name),
+    Category(
+        description: CategoryType.jewelery.description,
+        icon: AssetsConstants.jewelery,
+        name: CategoryType.jewelery.name),
+    Category(
+        description: CategoryType.womensClothing.description,
+        icon: AssetsConstants.womenClothing,
+        name: CategoryType.womensClothing.name),
+    Category(
+        description: CategoryType.mensClothing.description,
+        icon: AssetsConstants.mensClothing,
+        name: CategoryType.mensClothing.name),
+  ];
+
+  List<Product> displayList() {
+    if (categoryFilter == CategoryType.all.name) return productController.productList;
+    return productController.productList
+        .where((p0) => p0.category == categoryFilter)
+        .toList();
+  }
+
+  @override
+  void initState() {
+    productController.loadProducts();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Categories'),
+        title: const Text('Flutter Store'),
+        centerTitle: true,
+        actions: [],
       ),
       body: SafeArea(
-        child: ListView.separated(
-            padding: const EdgeInsets.all(8),
-            separatorBuilder: (BuildContext context, int index) =>
-                const Divider(),
-            itemCount: entries.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text('Category ${entries[index]}'.toUpperCase()),
-                subtitle: Text('Category ${entries[index]}'),
-                leading: Image.network('https://picsum.photos/200'),
-                trailing: const SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Icon(Icons.arrow_right_alt_outlined)),
-                onTap: () {
-                  Get.to(CategoryPage(category:  entries[index]));
-                },
-              );
+          child: Column(
+        children: [
+          SizedBox(
+            height: 100,
+            child: categoryListView(),
+          ),
+          Expanded(
+            child: Obx(() {
+              if (productController.isLoading()) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color.fromARGB(192, 88, 55, 10),
+                  ),
+                );
+              }
+              List<Product> entries = [...displayList()];
+              return ListView.separated(
+                  padding: const EdgeInsets.all(8),
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(),
+                  itemCount: entries.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title:
+                          Text('Product ${entries[index].title}'.toUpperCase()),
+                      subtitle: Text('Product ${entries[index].category}'),
+                      leading: Image.network(
+                        entries[index].image!,
+                        width: 100,
+                        loadingBuilder: (BuildContext context, Widget child,
+                            ImageChunkEvent? loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                        errorBuilder: (BuildContext context, Object error,
+                            StackTrace? stackTrace) {
+                          return const Icon(Icons.image_not_supported_rounded);
+                        },
+                      ),
+                      onTap: () {
+                        Get.to(ProductPage(product: entries[index]));
+                      },
+                    );
+                  });
             }),
-      ),
+          ),
+        ],
+      )),
+      bottomNavigationBar: const BottomBar(isElevated: false, isVisible: true),
     );
+  }
+
+  ListView categoryListView() {
+    return ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              for (Category category in categories)
+                Card(
+                  clipBehavior: Clip.hardEdge,
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      setState(() =>categoryFilter = category.name );
+                    },
+                    child: SizedBox(
+                      width: 100,
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: Image.asset(
+                                  fit: BoxFit.scaleDown,
+                                  width: 50,
+                                  height: 50,
+                                  category.icon),
+                            ),
+                            Expanded(child: 
+                            Center(child: Text(category.description, textAlign: TextAlign.center,))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
   }
 }
