@@ -1,9 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 abstract class LocalStorage {
   Future<String?> get(String key);
-  void set(String key, dynamic value);
-  void remove(String key);
+  Future<void>  set(String key, dynamic value);
+  Future<void>  remove(String key);
 }
 
 class SharePreferencesImpl implements LocalStorage {
@@ -19,13 +20,13 @@ class SharePreferencesImpl implements LocalStorage {
   }
 
   @override
-  void set(String key, dynamic value) async {
+  Future<void> set(String key, dynamic value) async {
     await _getInstance();
-    await _prefs?.setString(key, value);
+    await _prefs?.setString(key, jsonEncode(value));
   }
 
   @override
-  void remove(String key) async {
+  Future<void> remove(String key) async {
     await _getInstance();
     await _prefs?.remove(key);
   }

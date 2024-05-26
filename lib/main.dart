@@ -5,6 +5,7 @@ import 'package:flutter_store/routes/app_pages.dart';
 import './util/theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   MaterialTheme theme = const MaterialTheme(Typography.englishLike2021);
   startModules();
   runApp(   
