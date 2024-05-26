@@ -49,6 +49,10 @@ class ProductController extends GetxController {
     dynamic dynamicList = await _localDataSource
         .get(LocalStorageKeys.favoritedProducts) ;
 
+        if(dynamicList == null){
+          return;
+        }
+
     List<int> intList = List<int>.from( jsonDecode(dynamicList));
 
     if (dynamicList.isNotEmpty) {
