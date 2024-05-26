@@ -7,31 +7,31 @@ import 'package:flutter_store/app/view/login_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.LOGIN;
+  static const initial = Routes.login;
 
-  static GetPage UNKNOWN = GetPage(
-    name: Routes.UNKNOWN,
+  static GetPage unknown = GetPage(
+    name: Routes.unknown,
     page: () => const UnknownPage(),
   );
 
   static final routes = [
     GetPage(
       name: Routes
-          .HOME, //apenas uma string para ser o nome da rota. Separamos em outro módulo
-      page: () => HomePage(), //Widget da página
+          .home, //apenas uma string para ser o nome da rota. Separamos em outro módulo
+      page: () => const HomePage(), //Widget da página
     ),
     GetPage(
-      name: Routes.LOGIN,
+      name: Routes.login,
       page: () => const LoginPage(),
     ),
     GetPage(
-      name: Routes.PRODUCT,
+      name: Routes.product,
       page: () => const ProductPage(),
     ),
     GetPage(
-      name: Routes.CART,
+      name: Routes.cart,
       page: () => const CartPage(),
     ),
-    UNKNOWN
+    unknown
   ];
 }

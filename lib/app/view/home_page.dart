@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Flutter Store Home'),
         centerTitle: true,
-        actions: [],
       ),
       body: SafeArea(
           child: Column(
@@ -131,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                             builder: (_) =>
                                 ProductPage(product: entries[index]),
                             settings: RouteSettings(
-                                name: Routes.PRODUCT,
+                                name: Routes.product,
                                 arguments:
                                     ProductPage(product: entries[index]))));
                       },
