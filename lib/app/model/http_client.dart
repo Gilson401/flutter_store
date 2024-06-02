@@ -1,5 +1,4 @@
 import 'package:flutter_store/app/model/inject.dart';
-import 'package:flutter_store/app/model/local_storage.dart';
 import 'package:flutter_store/app/model/user_manager.dart';
 import 'package:dio/dio.dart';
 
@@ -68,9 +67,7 @@ abstract class HttpClient {
 }
 
 class DioImpl implements HttpClient {
-  final Dio _client; // = Dio();
-  final _localStorage = inject<LocalStorage>();
-
+  final Dio _client; 
   DioImpl() : _client = Dio() {
     _client.interceptors.add(
       InterceptorsWrapper(
@@ -82,14 +79,6 @@ class DioImpl implements HttpClient {
           final bool useToken = options.extra['useToken'] as bool;
 
           options.baseUrl = baseUrl;
-
-          // ignoring because the options.headers ??= will access a setter,
-          // therefore not really checking the nullable status of the real
-          // request.headers
-          // ignore: prefer_conditional_assignment
-          // if (options.headers == null) {
-          //   options.headers = <String, dynamic>{};
-          // }
 
           options.contentType ??= 'application/json';
 
@@ -124,7 +113,6 @@ class DioImpl implements HttpClient {
             if (response.statusMessage != null &&
                 response.statusMessage!.isNotEmpty)
               '\tstatusMessage: ${response.statusMessage}',
-            // '\tbody: ${response.data}',
           ].join('\n');
 
           _logInfo(logInfo);
