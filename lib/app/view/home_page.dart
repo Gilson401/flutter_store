@@ -4,8 +4,8 @@ import 'package:flutter_store/app/model/category_model.dart';
 import 'package:flutter_store/app/model/product_model.dart';
 import 'package:flutter_store/routes/app_routes.dart';
 import 'package:flutter_store/util/assets_constants.dart';
-import 'package:flutter_store/app/view/product_page.dart';
 import 'package:flutter_store/app/view/widgets/bottom_bar.dart';
+import 'package:flutter_store/app/view/widgets/shopbag_icon.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
@@ -56,18 +56,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-    @override
-  void dispose() {
-    productController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Flutter Store Home'),
         centerTitle: true,
+        actions: const [ShopbagIcon()],
       ),
       body: SafeArea(
           child: Column(
@@ -91,7 +86,6 @@ class _HomePageState extends State<HomePage> {
               }),
           Expanded(
             child: Obx(() {
-              
               List<Product> entries = [...displayList()];
               return ListView.separated(
                   padding: const EdgeInsets.all(8),
@@ -126,13 +120,10 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute<Widget>(
-                            builder: (_) =>
-                                ProductPage(product: entries[index]),
-                            settings: RouteSettings(
-                                name: Routes.product,
-                                arguments:
-                                    ProductPage(product: entries[index]))));
+                        Navigator.of(context).pushNamed(
+                          "${Routes.product}/${entries[index].id}",
+                          arguments: {'product':  entries[index]}
+                        );
                       },
                     );
                   });

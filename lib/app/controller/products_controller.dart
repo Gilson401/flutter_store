@@ -14,8 +14,10 @@ class ProductController extends GetxController {
 
   final RxList<Product> productList = <Product>[].obs;
   final RxList<int> _favoritedProductsId = <int>[].obs;
-  
-  List<int> favoritedProductsId() => _favoritedProductsId.toList() ;  
+  final RxList<int> _shopBagProductsId = <int>[].obs;
+
+  List<int> favoritedProductsId() => _favoritedProductsId.toList();
+  List<int> shopBagProductsId() => _shopBagProductsId.toList();
 
   Rx<Product?> product = Rx<Product?>(null);
 
@@ -29,7 +31,7 @@ class ProductController extends GetxController {
     return loading.value;
   }
 
-  RxString error = 'Sem erro'.obs;
+  RxString error = 'Not Errors'.obs;
   Future<void> setError(String err) async {
     error.value = err;
     update();
@@ -39,6 +41,7 @@ class ProductController extends GetxController {
   void onInit() {
     loadProducts();
     _loadFavorited();
+    _loadShopBag();
     super.onInit();
   }
 
@@ -46,14 +49,14 @@ class ProductController extends GetxController {
   setProduct(Product prod) => product.value = prod;
 
   void _loadFavorited() async {
-    dynamic dynamicList = await _localDataSource
-        .get(LocalStorageKeys.favoritedProducts) ;
+    dynamic dynamicList =
+        await _localDataSource.get(LocalStorageKeys.favoritedProducts);
 
-        if(dynamicList == null){
-          return;
-        }
+    if (dynamicList == null) {
+      return;
+    }
 
-    List<int> intList = List<int>.from( jsonDecode(dynamicList));
+    List<int> intList = List<int>.from(jsonDecode(dynamicList));
 
     if (dynamicList.isNotEmpty) {
       _favoritedProductsId.addAll(intList);
@@ -67,21 +70,58 @@ class ProductController extends GetxController {
     } else {
       await _addFavorited(id);
     }
-    update();
   }
 
   Future<void> _addFavorited(int id) async {
     _favoritedProductsId.add(id);
-
+    update();
     await _localDataSource.set(
         LocalStorageKeys.favoritedProducts, _favoritedProductsId);
   }
 
   Future<void> _removeFavorited(int id) async {
     _favoritedProductsId.removeWhere((element) => element == id);
-
+    update();
     await _localDataSource.set(
         LocalStorageKeys.favoritedProducts, _favoritedProductsId);
+  }
+
+  void _loadShopBag() async {
+    dynamic dynamicList =
+        await _localDataSource.get(LocalStorageKeys.shopBagProductsId);
+
+    if (dynamicList == null) {
+      return;
+    }
+
+    List<int> intList = List<int>.from(jsonDecode(dynamicList));
+
+    if (dynamicList.isNotEmpty) {
+      _shopBagProductsId.addAll(intList);
+      update();
+    }
+  }
+
+  Future<void> updateShopBag(int id) async {
+    if (_shopBagProductsId.contains(id)) {
+      await _removeFromShopBag(id);
+    } else {
+      await _addToShopBag(id);
+    }
+  }
+
+  Future<void> _addToShopBag(int id) async {
+    _shopBagProductsId.add(id);
+    update();
+    await _localDataSource.set(
+        LocalStorageKeys.shopBagProductsId, _shopBagProductsId);
+  }
+
+  Future<void> _removeFromShopBag(int id) async {
+    _shopBagProductsId.removeWhere((element) => element == id);
+    update();
+    await _localDataSource.set(
+        LocalStorageKeys.shopBagProductsId, _shopBagProductsId);
   }
 
   Future<void> loadProducts() async {
