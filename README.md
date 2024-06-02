@@ -1,2 +1,60 @@
-# flutter_store
-Flutter shopping app  FakestoreApi
+
+# Flutter Fake Store
+
+É um app de um ecommerce que consome a Fake Store API. A proposta é um aplicar o gerenciamento de estados com a biblioteca GetX em uma arquitetura Flutter MVC minimalista.
+
+Use as credenciais username:'johnd' e password:'m38rmF$' para fazer o login. Também pode usar outras credenciais disponíveis na documentação em "https://fakestoreapi.com/docs". 
+
+
+
+
+## Instalação
+
+Este projeto necessita da versão do Flutter 3.2.0 ou maior.
+
+Clone o repositório e então execute o comando 
+```
+flutter run
+```
+O flutter oferece opções para executar para cada uma das plataformas possíveis. Avalie na documentação do flutter qual opção de launch é a  dequada para teu interesse.
+## Deploy
+
+Para construir a build e fazer o deploy desse projeto rode o comando
+
+```bash
+  flutter build web --web-renderer html
+```
+Será criada a builda na pasta build/web.
+
+
+
+
+
+## Demonstração
+
+https://gilson401.github.io/flutter_store
+## Funcionalidades
+
+- Responsividade
+- GetX como gerenciador de estado
+- Multiplataforma
+- Persistência de usuário logado com local storage
+
+
+## Aprendizados
+
+- GetX como gerenciador de estados.
+- Aplicação prática do padrão de arquitetura MVC 
+- Responsividade via GetResponsiveView
+
+## Screenshots
+
+![App Screenshot](https://private-user-images.githubusercontent.com/66516553/335880010-24b20f2b-35e1-4961-9044-925033571775.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTczNDQxMDgsIm5iZiI6MTcxNzM0MzgwOCwicGF0aCI6Ii82NjUxNjU1My8zMzU4ODAwMTAtMjRiMjBmMmItMzVlMS00OTYxLTkwNDQtOTI1MDMzNTcxNzc1LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA2MDIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwNjAyVDE1NTY0OFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTk2YzAzMzgxZmNhMjYyY2FjNzUwODY5NzQ0Mzc1MGRkYjlmOTVmNTY3ZjcwYTQzODAyZDk0ZGM5Y2ZhYmVmMGYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.d2W8_PKO3xNBCtXe9w_w2KYuw-Jtnay78iuGO9jFZZo)
+
+![App Screenshot](https://private-user-images.githubusercontent.com/66516553/335879977-ea213524-793c-46e7-8255-76b85699d48d.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTczNDQxMDgsIm5iZiI6MTcxNzM0MzgwOCwicGF0aCI6Ii82NjUxNjU1My8zMzU4Nzk5NzctZWEyMTM1MjQtNzkzYy00NmU3LTgyNTUtNzZiODU2OTlkNDhkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA2MDIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwNjAyVDE1NTY0OFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWI4MWU4MDBhZjNiNWIzMmVhYWZhYjIyNTk0NGQyNDQ1Njk4MjU2MTZjZGVjM2Y3MWIxMGQwZGE2NTgzM2E0NTImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.nD2nWQyzpU1U2Lhy_khGtOMsvC5WaHU0cBdiT4jXTKE)
+
+![App Screenshot](https://private-user-images.githubusercontent.com/66516553/335879845-ff43d8a3-53bc-4b35-ae6f-101bc5548aec.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTczNDQxMDgsIm5iZiI6MTcxNzM0MzgwOCwicGF0aCI6Ii82NjUxNjU1My8zMzU4Nzk4NDUtZmY0M2Q4YTMtNTNiYy00YjM1LWFlNmYtMTAxYmM1NTQ4YWVjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA2MDIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwNjAyVDE1NTY0OFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWNiNDY5M2M5NGY4NjI1ZTE1MGM4NzBlNWE5MzJjMDZiOTZjYjk4Y2Y1NGYxMDc3MzVkZjU4MjhhMjgzNzExZDQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.-NG6OKyrjO5XbURgze32oQDvFrnHlW6IBf_CIPoGYX0)
+
+![App Screenshot](https://private-user-images.githubusercontent.com/66516553/335879805-2cc6af59-12bd-4dd2-8561-2fdca12b8072.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MTczNDQxMDgsIm5iZiI6MTcxNzM0MzgwOCwicGF0aCI6Ii82NjUxNjU1My8zMzU4Nzk4MDUtMmNjNmFmNTktMTJiZC00ZGQyLTg1NjEtMmZkY2ExMmI4MDcyLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA2MDIlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwNjAyVDE1NTY0OFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWZiYTFiOGE2MTgxNDJjNjhkOTAwZTYzODQ0Y2I5YmFiNjFmNmI0ZTExZjQ3ZmVkOWNlOWI3NjhmMGM1NjZkMDYmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.BSXDZNEx_m-Eb5WDK69GGnKnlGUGmBS_5t-fNax94-U)
+![Logo](https://gilsonpaulo.com.br/android-chrome-192x192.png)
+
